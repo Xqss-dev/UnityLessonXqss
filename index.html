@@ -23,34 +23,51 @@
             cursor: pointer;
             margin: 10px;
             display: inline-block;
-
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .button:hover {
+            background-color: #0000a0;
+            transform: scale(1.05);
         }
         .hidden { display: none; }
         .lesson-container, .code-container {
             margin: 20px auto;
-            width: 80%;
+            width: 90%;
+            max-width: 600px;
             background-color: black;
             border: 1px solid white;
             padding: 20px;
             border-radius: 20px;
             text-align: left;
             position: relative;
+            transition: opacity 0.5s, transform 0.5s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .lesson-container.show, .code-container.show {
+            opacity: 1;
+            transform: translateY(0);
         }
         .copy-icon {
             position: absolute;
             top: 10px;
             right: 10px;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .copy-icon:hover {
+            transform: scale(1.2);
         }
         .input-container {
-            margin: 20px 0;
+            margin: 20px auto;
             padding: 15px;
             border-radius: 20px;
             background-color: #303030;
             display: flex;
             flex-direction: column;
-            width: 50%;
-            margin: auto;
+            width: 90%;
+            max-width: 400px;
+            transition: opacity 0.5s, transform 0.5s;
         }
         input {
             border: none;
@@ -59,6 +76,7 @@
             border-radius: 15px;
             text-align: center;
             background-color: lightgray;
+            font-size: 16px;
         }
         .footer {
             margin-top: 30px;
@@ -76,19 +94,19 @@
     <div id="lesson" class="hidden">
         <div class="lesson-container">
             <h2>Как создать First Person Controller?</h2>
-            <p>Этот скрипт управляет перемещением игрока в Unity.Обязательно смените EDIT>PROJECT SETTINGS>PLAYER>INPUT SYSTEM PACKAGE = Old</p>
+            <p>Этот скрипт управляет перемещением игрока в Unity. Обязательно смените EDIT>PROJECT SETTINGS>PLAYER>INPUT SYSTEM PACKAGE = Old</p>
             
             <div class="code-container">
                 <i class="fas fa-copy copy-icon" onclick="copyCode()"></i>
                 <pre><code id="defaultCode">using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public float speed = 5f; // Скорость передвижения игрока
-    public float sensitivity = 2f; // Чувствительность камеры
+    public float speed = 5f;
+    public float sensitivity = 2f;
 
     void Update() {
-        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime; // Передвижение влево/вправо
-        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime; // Передвижение вперёд/назад
+        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         transform.Translate(moveX, 0, moveZ);
     }
 }</code></pre>
@@ -116,7 +134,11 @@ public class PlayerController : MonoBehaviour {
     <script>
         function showLesson() {
             document.getElementById('menu').classList.add('hidden');
-            document.getElementById('lesson').classList.remove('hidden');
+            let lesson = document.getElementById('lesson');
+            lesson.classList.remove('hidden');
+            setTimeout(() => {
+                lesson.querySelector('.lesson-container').classList.add('show');
+            }, 50);
         }
         function copyCode() {
             navigator.clipboard.writeText(document.getElementById("defaultCode").innerText);
@@ -134,18 +156,22 @@ public class PlayerController : MonoBehaviour {
             let generatedCode = `using UnityEngine;
 
 public class ${className} : MonoBehaviour {
-    public float speed = ${speed}f; // Скорость передвижения игрока
-    public float sensitivity = ${sensitivity}f; // Чувствительность камеры
+    public float speed = ${speed}f;
+    public float sensitivity = ${sensitivity}f;
 
     void Update() {
-        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime; // Передвижение влево/вправо
-        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime; // Передвижение вперёд/назад
+        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         transform.Translate(moveX, 0, moveZ);
     }
 }`;
             
             document.getElementById('generatedCode').innerText = generatedCode;
-            document.getElementById('generatedCodeContainer').classList.remove('hidden');
+            let container = document.getElementById('generatedCodeContainer');
+            container.classList.remove('hidden');
+            setTimeout(() => {
+                container.querySelector('.code-container').classList.add('show');
+            }, 50);
         }
     </script>
 </body>
