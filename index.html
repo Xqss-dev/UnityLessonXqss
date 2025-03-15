@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Lessons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Общий стиль страницы */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .button {
+            background-color: #0000A7;
+            border: 2px solid white;
+            border-radius: 20px;
+            padding: 15px 30px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+            display: inline-block;
+
+        }
+        .hidden { display: none; }
+        .lesson-container, .code-container {
+            margin: 20px auto;
+            width: 80%;
+            background-color: black;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: left;
+            position: relative;
+        }
+        .copy-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        .input-container {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 20px;
+            background-color: #333;
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            margin: auto;
+        }
+        input {
+            border: none;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 15px;
+            text-align: center;
+            background-color: lightgray;
+        }
+        .footer {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: black;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <div class="button" onclick="showLesson()">First Person Controller</div>
+    </div>
+    
+    <div id="lesson" class="hidden">
+        <div class="lesson-container">
+            <h2>Как создать First Person Controller?</h2>
+            <p>Этот скрипт управляет перемещением игрока в Unity.Обязательно смените EDIT>PROJECT SETTINGS>PLAYER>INPUT SYSTEM PACKAGE = Old</p>
+            
+            <div class="code-container">
+                <i class="fas fa-copy copy-icon" onclick="copyCode()"></i>
+                <pre><code id="defaultCode">using UnityEngine;
+
+public class PlayerController : MonoBehaviour {
+    public float speed = 5f; // Скорость передвижения игрока
+    public float sensitivity = 2f; // Чувствительность камеры
+
+    void Update() {
+        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime; // Передвижение влево/вправо
+        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime; // Передвижение вперёд/назад
+        transform.Translate(moveX, 0, moveZ);
+    }
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="className" placeholder="Имя класса">
+            <input type="number" id="speed" placeholder="Скорость игрока">
+            <input type="number" id="sensitivity" placeholder="Чувствительность камеры">
+            <div class="button" onclick="generateCode()">Готово</div>
+        </div>
+        
+        <div id="generatedCodeContainer" class="footer hidden">
+            <h3>Сгенерированный код:</h3>
+            <div class="code-container">
+                <i class="fas fa-copy copy-icon" onclick="copyGeneratedCode()"></i>
+                <pre><code id="generatedCode"></code></pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">Made by Xqss with ❤️</div>
+    
+    <script>
+        function showLesson() {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('lesson').classList.remove('hidden');
+        }
+        function copyCode() {
+            navigator.clipboard.writeText(document.getElementById("defaultCode").innerText);
+            alert("Код скопирован!");
+        }
+        function copyGeneratedCode() {
+            navigator.clipboard.writeText(document.getElementById("generatedCode").innerText);
+            alert("Сгенерированный код скопирован!");
+        }
+        function generateCode() {
+            let className = document.getElementById('className').value || 'PlayerController';
+            let speed = document.getElementById('speed').value || '5';
+            let sensitivity = document.getElementById('sensitivity').value || '2';
+            
+            let generatedCode = `using UnityEngine;
+
+public class ${className} : MonoBehaviour {
+    public float speed = ${speed}f; // Скорость передвижения игрока
+    public float sensitivity = ${sensitivity}f; // Чувствительность камеры
+
+    void Update() {
+        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime; // Передвижение влево/вправо
+        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime; // Передвижение вперёд/назад
+        transform.Translate(moveX, 0, moveZ);
+    }
+}`;
+            
+            document.getElementById('generatedCode').innerText = generatedCode;
+            document.getElementById('generatedCodeContainer').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
